@@ -5,10 +5,13 @@ import android.text.TextUtils;
 import com.coolweather.android.db.City;
 import com.coolweather.android.db.County;
 import com.coolweather.android.db.Province;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import gson.Weather;
 
 /**
  * Created by kaxn on 2018/1/8.
@@ -80,8 +83,19 @@ public class Utility {
         }
         return  false;
     }
+    public static Weather handleWeatherResponse(String response){
+        try {
+//            该方法通过JSONObject、JSONArray将天气数据中的主体内容解析出来
+            JSONObject jsonObject=new JSONObject(response);
+            JSONArray jsonArray=jsonObject.getJSONArray("HeWeather");
+            String weatherContent =jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent,Weather.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
 
-
+    }
 
 
 }
